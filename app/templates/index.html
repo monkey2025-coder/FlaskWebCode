@@ -11,12 +11,12 @@
     {% else %} 
         Stranger 
     {% endif %}!
-    
-    {% if not known %} 
-    <p>Pleased to meet you!</p> 
+
+    {% if current_user.is_authenticated and current_user.can(Permission.ADMINISTER) %}
+        <li><a href="#">Admin Panel</a></li>
     {% else %} 
-    <p>Happy to see you again!</p> 
-    {% endif %} 
+        <li><a href="#">user Panel</a></li>
+    {% endif %}
 </div> 
 
 {% endblock %}

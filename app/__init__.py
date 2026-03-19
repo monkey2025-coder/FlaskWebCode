@@ -37,9 +37,19 @@ def create_app(config_name='default'):
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint) 
+    
+    # 导入Permission并添加到模板上下文
+    from .models import Permission
+    @app.context_processor 
+    def inject_permissions(): 
+        return dict(Permission=Permission)
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    # 设置匿名用户类
+    from .models import AnonymousUser
+    login_manager.anonymous_user = AnonymousUser
 
     return app
 
