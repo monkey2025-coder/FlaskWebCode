@@ -1,9 +1,213 @@
 {% extends "bootstrap/base.html" %} 
 
+{% block head %} 
+{{ super() }} 
+<style> 
+    /* 蔚蓝档案风格样式 */ 
+    :root { 
+        --primary-color: #3b82f6; /* 主蓝色 */ 
+        --secondary-color: #ec4899; /* 辅助粉色 */ 
+        --accent-color: #f97316; /* 强调色 */ 
+        --light-color: #f3f4f6; /* 浅色背景 */ 
+        --dark-color: #1e293b; /* 深色文字 */ 
+        --card-bg: #ffffff; /* 卡片背景 */ 
+        --border-color: #e2e8f0; /* 边框颜色 */ 
+    } 
+    
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: var(--light-color); 
+        color: var(--dark-color); 
+    } 
+    
+    /* 导航栏样式 */ 
+    .navbar { 
+        background: linear-gradient(135deg, var(--primary-color), #60a5fa); 
+        border: none; 
+        box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3); 
+    } 
+    
+    .navbar-brand { 
+        color: white !important; 
+        font-weight: bold; 
+        font-size: 1.5rem; 
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); 
+    } 
+    
+    .navbar-nav > li > a { 
+        color: white !important; 
+        font-weight: 500; 
+        transition: all 0.3s ease; 
+    } 
+    
+    .navbar-nav > li > a:hover { 
+        background-color: rgba(255, 255, 255, 0.2); 
+        border-radius: 4px; 
+    } 
+    
+    /* 内容区域样式 */ 
+    .container { 
+        margin-top: 20px; 
+        margin-bottom: 40px; 
+    } 
+    
+    /* 卡片样式 */ 
+    .card { 
+        background-color: var(--card-bg); 
+        border-radius: 12px; 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+        padding: 20px; 
+        margin-bottom: 20px; 
+        transition: all 0.3s ease; 
+    } 
+    
+    .card:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); 
+    } 
+    
+    /* 按钮样式 */ 
+    .btn-primary { 
+        background-color: var(--primary-color); 
+        border-color: var(--primary-color); 
+        transition: all 0.3s ease; 
+    } 
+    
+    .btn-primary:hover { 
+        background-color: #2563eb; 
+        border-color: #2563eb; 
+        transform: translateY(-2px); 
+        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4); 
+    } 
+    
+    /* 表单样式 */ 
+    .form-control { 
+        border-radius: 8px; 
+        border: 1px solid var(--border-color); 
+        transition: all 0.3s ease; 
+    } 
+    
+    .form-control:focus { 
+        border-color: var(--primary-color); 
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
+    } 
+    
+    /* 警告框样式 */ 
+    .alert { 
+        border-radius: 8px; 
+        border: none; 
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+    } 
+    
+    /* 页头样式 */ 
+    .page-header { 
+        color: var(--dark-color); 
+        margin-bottom: 30px; 
+        padding-bottom: 10px; 
+        border-bottom: 2px solid var(--primary-color); 
+    } 
+    
+    .page-header h1 { 
+        font-weight: bold; 
+        color: var(--primary-color); 
+    } 
+    
+    /* 帖子样式 */ 
+    .post { 
+        background-color: var(--card-bg); 
+        border-radius: 12px; 
+        padding: 20px; 
+        margin-bottom: 20px; 
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+        transition: all 0.3s ease; 
+    } 
+    
+    .post:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+    } 
+    
+    .post-header { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 10px; 
+    } 
+    
+    .post-author { 
+        font-weight: bold; 
+        color: var(--primary-color); 
+    } 
+    
+    .post-date { 
+        color: #64748b; 
+        font-size: 0.9rem; 
+    } 
+    
+    .post-body { 
+        margin-top: 10px; 
+        line-height: 1.6; 
+    } 
+    
+    .post-footer { 
+        margin-top: 15px; 
+    } 
+    
+    /* 头像样式 */ 
+    .profile-thumbnail img { 
+        border-radius: 50%; 
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+        transition: all 0.3s ease; 
+        width: 40px; 
+        height: 40px; 
+        object-fit: cover; 
+    } 
+    
+    .profile-thumbnail img:hover { 
+        transform: scale(1.05); 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+    } 
+    
+    /* 去除列表样式 */ 
+    ul { 
+        list-style: none; 
+        padding: 0; 
+        margin: 0; 
+    } 
+    
+    /* 个人资料样式 */ 
+    .profile-thumbnail { 
+        display: inline-block; 
+    } 
+    
+    .profile-thumbnail img { 
+        border-radius: 50%; 
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
+        transition: all 0.3s ease; 
+    } 
+    
+    .profile-thumbnail img:hover { 
+        transform: scale(1.05); 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+    } 
+    
+    /* 响应式调整 */ 
+    @media (max-width: 768px) { 
+        .navbar-nav { 
+            margin-top: 10px; 
+        } 
+        
+        .container { 
+            margin-top: 10px; 
+        } 
+    } 
+</style> 
+{% endblock %} 
+
 {% block title %}Flasky{% endblock %} 
 
 {% block navbar %} 
-<div class="navbar navbar-inverse" role="navigation"> 
+<div class="navbar navbar-default" role="navigation"> 
     <div class="container"> 
         <div class="navbar-header"> 
             <button type="button" class="navbar-toggle" 
@@ -14,18 +218,19 @@
                 <span class="icon-bar"></span> 
             </button> 
             <a class="navbar-brand" href="/">Flasky</a> 
-            <ul class="nav navbar-nav navbar-right"> 
-                {% if current_user.is_authenticated %} 
-                <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li> 
-                <li><a href="{{ url_for('main.user', username=current_user.username) }}"> Profile </a></li> 
-                {% else %} 
-                <li><a href="{{ url_for('auth.login') }}">Sign In</a></li> 
-                {% endif %} 
-            </ul>
         </div> 
         <div class="navbar-collapse collapse"> 
             <ul class="nav navbar-nav"> 
                 <li><a href="/">Home</a></li> 
+            </ul> 
+            <ul class="nav navbar-nav navbar-right"> 
+                {% if current_user.is_authenticated %} 
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}"> Profile </a></li> 
+                <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li> 
+                {% else %} 
+                <li><a href="{{ url_for('auth.login') }}">Sign In</a></li> 
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li> 
+                {% endif %} 
             </ul> 
         </div>
     </div> 
@@ -48,4 +253,29 @@
 {% block scripts %} 
 {{ super() }} 
 {{ moment.include_moment() }} 
+<script> 
+    // 添加一些简单的动画效果 
+    document.addEventListener('DOMContentLoaded', function() { 
+        // 页面加载时的淡入效果 
+        const container = document.querySelector('.container'); 
+        if (container) { 
+            container.style.opacity = '0'; 
+            container.style.transition = 'opacity 0.5s ease'; 
+            setTimeout(() => { 
+                container.style.opacity = '1'; 
+            }, 100); 
+        } 
+        
+        // 按钮悬停效果 
+        const buttons = document.querySelectorAll('button, .btn'); 
+        buttons.forEach(button => { 
+            button.addEventListener('mouseenter', function() { 
+                this.style.transform = 'translateY(-2px)'; 
+            }); 
+            button.addEventListener('mouseleave', function() { 
+                this.style.transform = 'translateY(0)'; 
+            }); 
+        }); 
+    }); 
+</script> 
 {% endblock %}
