@@ -1,9 +1,9 @@
 {% extends "base.html" %} 
 {% import "bootstrap/wtf.html" as wtf %} 
+{% import "_macros.html" as macros %} 
+
 {% block title %}Flasky{% endblock %} 
 {% block page_content %} 
-<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p> 
-<p>That was {{ moment(current_time).fromNow(refresh=True) }}</p>
 <div class="page-header"> 
     Hello, 
     {% if current_user.is_authenticated %} 
@@ -11,12 +11,22 @@
     {% else %} 
         Stranger 
     {% endif %}!
-
-    {% if current_user.is_authenticated and current_user.can(Permission.ADMINISTER) %}
-        <li><a href="#">Admin Panel</a></li>
-    {% else %} 
-        <li><a href="#">user Panel</a></li>
-    {% endif %}
 </div> 
 
+<div> 
+    {% if current_user.can(Permission.WRITE_ARTICLES) %} 
+    {{ wtf.quick_form(form) }} 
+    {% endif %} 
+</div> 
+
+{% include '_posts.html' %}
+<div class="pagination"> 
+    {{ macros.pagination_widget(pagination, '.index') }} 
+</div> 
+
+{% endblock %}  
+
+{% block scripts %} 
+{{ super() }} 
+{{ pagedown.include_pagedown() }} 
 {% endblock %}

@@ -6,12 +6,14 @@ from config import config
 from flask_login import LoginManager 
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
+from flask_pagedown import PageDown 
 
 bootstrap = Bootstrap() 
 moment = Moment() 
 db = SQLAlchemy()
 csrf = CSRFProtect()
 migrate = Migrate()
+pagedown = PageDown() 
 
 login_manager = LoginManager() 
 login_manager.session_protection = 'strong' 
@@ -34,6 +36,7 @@ def create_app(config_name='default'):
     login_manager.init_app(app)
     csrf.init_app(app)
     migrate.init_app(app, db)
+    pagedown.init_app(app)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint) 
