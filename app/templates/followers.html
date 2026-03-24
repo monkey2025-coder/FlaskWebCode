@@ -1,5 +1,6 @@
 {% extends "base.html" %} 
-{% block title %}Flasky{% endblock %} 
+{% import "_macros.html" as macros %} 
+{% block title %}Flasky - {{ title }} {{ user.username }}{% endblock %} 
 {% block page_content %} 
 <div class="card">
     <div class="row">
@@ -35,7 +36,7 @@
                     Edit Profile 
                 </a> 
                 {% endif %}
-                {% if current_user.is_administrator() %} 
+                {% if current_user.is_administrator %} 
                 <a class="btn btn-danger" 
                         href="{{ url_for('.edit_profile_admin', id=user.id) }}"> 
                     Edit Profile [Admin] 
@@ -59,14 +60,39 @@
                  Following: <span class="badge">{{ user.followed.count() - 1 }}</span> 
             </a> 
             {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %} 
-            | <span class="label label-default">Follows you</span> python run_self_follows.py
+            | <span class="label label-default">Follows you</span> 
             {% endif %}
         </div>
     </div>
 </div>
 
 <div class="mt-5">
-    <h3>Posts by {{ user.username }}</h3> 
-    {% include '_posts.html' %} 
+    <h3>{{ title }} {{ user.username }}</h3> 
+    {% if follows %} 
+    <ul class="list-unstyled"> 
+        {% for follow in follows %} 
+        <li class="card mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="{{ url_for('.user', username=follow.user.username) }}">
+                        <img class="img-rounded" src="{{ follow.user.gravatar(size=40) }}">
+                    </a>
+                </div>
+                <div class="col-md-10">
+                    <a href="{{ url_for('.user', username=follow.user.username) }}">{{ follow.user.username }}</a>
+                    <span class="text-muted">followed since {{ moment(follow.timestamp).format('L') }}</span>
+                </div>
+            </div>
+        </li> 
+        {% endfor %} 
+    </ul> 
+    {% else %} 
+    <p>No {{ title.lower() }} yet.</p> 
+    {% endif %} 
+    {% if pagination %} 
+    <div class="pagination"> 
+        {{ macros.pagination_widget(pagination, endpoint, username=user.username) }} 
+    </div> 
+    {% endif %} 
 </div>
 {% endblock %}

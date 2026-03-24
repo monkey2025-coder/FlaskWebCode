@@ -43,6 +43,14 @@ class Role(db.Model):
         return '<Role %r>' % self.name 
 
 
+class Follow(db.Model): 
+    __tablename__ = 'follows' 
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), 
+                            primary_key=True) 
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), 
+                            primary_key=True) 
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 class User(UserMixin, db.Model): 
     __tablename__ = 'users' 
     id = db.Column(db.Integer, primary_key = True) 
@@ -60,6 +68,9 @@ class User(UserMixin, db.Model):
     
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
+    followed = db.relationship('Follow', foreign_keys=[Follow.follower_id], backref=db.backref('follower', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan') 
+    followers = db.relationship('Follow', foreign_keys=[Follow.followed_id], backref=db.backref('followed', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan')
+
     def __init__(self, **kwargs): 
         super(User, self).__init__(**kwargs)
         if self.role is None: 
@@ -69,6 +80,38 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(default=True).first() 
         if self.email is not None and self.avatar_hash is None: 
             self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest() 
+        self.follow(self)
+    
+    @staticmethod 
+    def add_self_follows(): 
+        for user in User.query.all(): 
+            if not user.is_following(user): 
+                user.follow(user) 
+                db.session.add(user) 
+                db.session.commit() 
+    
+    @property 
+    def followed_posts(self): 
+        return Post.query.join(Follow, Follow.followed_id == Post.author_id).filter(Follow.follower_id == self.id)
+    
+    def follow(self, user): 
+       if not self.is_following(user): 
+           f = Follow(follower=self, followed=user) 
+           db.session.add(f) 
+           db.session.commit()
+    
+    def unfollow(self, user): 
+       if self.is_following(user): 
+           f = self.followed.filter_by(followed_id=user.id).first() 
+           if f: 
+               db.session.delete(f) 
+               db.session.commit()
+    
+    def is_following(self, user): 
+        return self.followed.filter_by(followed_id=user.id).first() is not None
+    
+    def is_followed_by(self, user): 
+        return self.followers.filter_by(follower_id=user.id).first() is not None
     
     def ping(self): 
         self.last_seen = datetime.utcnow() 
@@ -93,7 +136,7 @@ class User(UserMixin, db.Model):
         self.email = new_email 
         self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest() 
         db.session.add(self) 
-        db.session.commit(self) 
+        db.session.commit() 
         return True 
 
     @property 
@@ -123,6 +166,7 @@ class Post(db.Model):
     def on_changed_body(target, value, oldvalue, initiator): 
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p'] 
         target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), tags=allowed_tags, strip=True)) 
+
 
 class AnonymousUser(AnonymousUserMixin): 
     def can(self, permissions): 
