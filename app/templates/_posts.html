@@ -39,7 +39,12 @@
                         Edit [Admin] 
                     </a> 
                     {% endif %} 
-                </div> 
+                </div>
+                <a href="{{ url_for('.post', id=post.id) }}#comments"> 
+                    <span class="label label-primary"> 
+                        {{ post.comments.count() }} Comments 
+                    </span> 
+                </a> 
             </div>
         </div>
     </div> 
