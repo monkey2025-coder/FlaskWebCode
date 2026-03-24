@@ -13,6 +13,13 @@
     {% endif %}!
 </div> 
 
+{% if current_user.is_authenticated %} 
+<div class="mb-3"> 
+    <a href="{{ url_for('.show_all') }}" class="btn btn-default{% if not show_followed %} active{% endif %}">All</a> 
+    <a href="{{ url_for('.show_followed') }}" class="btn btn-default{% if show_followed %} active{% endif %}">Followed</a> 
+</div> 
+{% endif %} 
+
 <div> 
     {% if current_user.can(Permission.WRITE_ARTICLES) %} 
     {{ wtf.quick_form(form) }} 

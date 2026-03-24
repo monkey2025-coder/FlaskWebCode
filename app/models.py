@@ -92,7 +92,15 @@ class User(UserMixin, db.Model):
     
     @property 
     def followed_posts(self): 
-        return Post.query.join(Follow, Follow.followed_id == Post.author_id).filter(Follow.follower_id == self.id)
+        # 包含用户自己的文章和关注的人的文章
+        return Post.query.filter(
+            db.or_(
+                Post.author_id == self.id,
+                Post.author_id.in_(
+                    db.session.query(Follow.followed_id).filter(Follow.follower_id == self.id)
+                )
+            )
+        ).order_by(Post.timestamp.desc())
     
     def follow(self, user): 
        if not self.is_following(user): 
