@@ -1,31 +1,29 @@
 {% macro pagination_widget(pagination, endpoint) %} 
-<ul class="pagination"> 
-    <li{% if not pagination.has_prev %} class="disabled"{% endif %}> 
-        <a href="{% if pagination.has_prev %}{{ url_for(endpoint, 
-            page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}"> 
+<div class="flex justify-center mt-8"> 
+    <nav class="inline-flex rounded-md shadow"> 
+        <a href="{% if pagination.has_prev %}{{ url_for(endpoint, page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}" class="px-4 py-2 text-sm font-medium text-blue-archive bg-white border border-blue-archive rounded-l-md hover:bg-blue-archive hover:text-white transition-all duration-300 {% if not pagination.has_prev %}opacity-50 cursor-not-allowed{% endif %}"> 
             &laquo; 
         </a> 
-    </li> 
-    {% for p in pagination.iter_pages() %} 
-        {% if p %} 
-            {% if p == pagination.page %} 
-            <li class="active"> 
-                <a href="{{ url_for(endpoint, page = p, **kwargs) }}">{{ p }}</a> 
-            </li> 
+        {% for p in pagination.iter_pages() %} 
+            {% if p %} 
+                {% if p == pagination.page %} 
+                <a href="{{ url_for(endpoint, page = p, **kwargs) }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-archive border border-blue-archive hover:bg-blue-archive/90 transition-all duration-300"> 
+                    {{ p }} 
+                </a> 
+                {% else %} 
+                <a href="{{ url_for(endpoint, page = p, **kwargs) }}" class="px-4 py-2 text-sm font-medium text-blue-archive bg-white border border-blue-archive hover:bg-blue-archive hover:text-white transition-all duration-300"> 
+                    {{ p }} 
+                </a> 
+                {% endif %} 
             {% else %} 
-            <li> 
-                <a href="{{ url_for(endpoint, page = p, **kwargs) }}">{{ p }}</a> 
-            </li> 
+            <a href="#" class="px-4 py-2 text-sm font-medium text-blue-archive bg-white border border-blue-archive hover:bg-blue-archive hover:text-white transition-all duration-300"> 
+                &hellip; 
+            </a> 
             {% endif %} 
-        {% else %} 
-        <li class="disabled"><a href="#">&hellip;</a></li> 
-        {% endif %} 
-    {% endfor %} 
-    <li{% if not pagination.has_next %} class="disabled"{% endif %}> 
-        <a href="{% if pagination.has_next %}{{ url_for(endpoint, 
-            page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}"> 
+        {% endfor %} 
+        <a href="{% if pagination.has_next %}{{ url_for(endpoint, page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}" class="px-4 py-2 text-sm font-medium text-blue-archive bg-white border border-blue-archive rounded-r-md hover:bg-blue-archive hover:text-white transition-all duration-300 {% if not pagination.has_next %}opacity-50 cursor-not-allowed{% endif %}"> 
             &raquo; 
         </a> 
-    </li> 
-</ul> 
+    </nav> 
+</div> 
 {% endmacro %}

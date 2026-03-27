@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block title %}Flasky - Edit Profile{% endblock %}
+{% block title %}Flask社区 - 编辑个人资料{% endblock %}
 {% block page_content %}
-<div class="page-header">
-    <h1>Edit Your Profile</h1>
-</div>
-<div class="col-md-4">
-    {{ wtf.quick_form(form) }}
+<div class="max-w-md mx-auto">
+    <h1 class="text-3xl font-bold text-blue-archive mb-6">编辑个人资料</h1>
+    <div class="bg-white rounded-xl shadow-md p-6">
+        {{ wtf.quick_form(form) }}
+    </div>
 </div>
 {% endblock %}

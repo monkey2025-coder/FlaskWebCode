@@ -1,25 +1,27 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
-{% block title %}Flasky - Post{% endblock %}
+{% block title %}Flask社区 - 帖子{% endblock %}
 {% block page_content %}
-<div class="page-header">
-    <h1>Post</h1>
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-blue-archive mb-6">帖子</h1>
 </div>
 
 {% include "_posts.html" %}
 
-<h4 id="comments">Comments</h4>
-{% if current_user.can(Permission.COMMENT) %}
-<div class="comment-form">
-    {{ wtf.quick_form(form) }}
+<div class="mt-10">
+    <h2 class="text-2xl font-bold text-blue-archive mb-6" id="comments">评论</h2>
+    {% if current_user.can(Permission.COMMENT) %}
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        {{ wtf.quick_form(form) }}
+    </div>
+    {% endif %}
+    {% include "_comments.html" %}
+    {% if pagination %}
+    <div class="flex justify-center mt-8">
+        {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=posts[0].id) }}
+    </div>
+    {% endif %}
 </div>
-{% endif %}
-{% include "_comments.html" %}
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=posts[0].id) }}
-</div>
-{% endif %}
 
 {% endblock %}

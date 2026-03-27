@@ -1,16 +1,16 @@
 {% extends "base.html" %} 
 {% import "bootstrap/wtf.html" as wtf %} 
 
-{% block title %}Flasky - Register{% endblock %} 
+{% block title %}Flask社区 - 注册{% endblock %} 
 {% block page_content %} 
-<div class="page-header"> 
-    <h1>Register</h1> 
-</div> 
-<div class="col-md-4"> 
-    {{ wtf.quick_form(form) }} 
-    <p> 
-        Have a registered user? 
-        <a href="{{ url_for('auth.login') }}"> Click here to login </a> 
-    </p>
+<div class="max-w-md mx-auto"> 
+    <h1 class="text-3xl font-bold text-blue-archive mb-6">注册</h1> 
+    <div class="bg-white rounded-xl shadow-md p-6"> 
+        {{ wtf.quick_form(form) }} 
+        <p class="mt-4 text-center"> 
+            已有账号？ 
+            <a href="{{ url_for('auth.login') }}" class="text-blue-archive hover:underline"> 点击这里登录 </a> 
+        </p>
+    </div> 
 </div> 
 {% endblock %}

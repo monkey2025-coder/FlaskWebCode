@@ -1,38 +1,39 @@
 {% if comments %} 
-<ul class="list-unstyled"> 
+<div class="space-y-4"> 
     {% for comment in comments %} 
-    <li class="card mb-3">
-        <div class="row">
-            <div class="col-md-2">
+    <div class="bg-white rounded-xl shadow-md p-4 card-hover">
+        <div class="flex items-start">
+            <div class="mr-4">
                 <a href="{{ url_for('.user', username=comment.author.username) }}">
-                    <img class="img-rounded" src="{{ comment.author.gravatar(size=40) }}">
+                    <img src="{{ comment.author.gravatar(size=48) }}" class="w-10 h-10 rounded-full object-cover shadow-sm avatar-hover">
                 </a>
             </div>
-            <div class="col-md-10">
-                <div class="comment-content">
+            <div class="flex-1">
+                <div class="flex justify-between items-center mb-2">
+                    <a href="{{ url_for('.user', username=comment.author.username) }}" class="font-bold text-blue-archive hover:underline">{{ comment.author.username }}</a>
+                    <span class="text-gray-500 text-sm">{{ moment(comment.timestamp).fromNow() }}</span>
+                </div>
+                <div class="mb-3">
                     {% if comment.body_html %}
                         {{ comment.body_html | safe }}
                     {% else %}
                         {{ comment.body }}
                     {% endif %}
                 </div>
-                <div class="comment-meta">
-                    <a href="{{ url_for('.user', username=comment.author.username) }}">{{ comment.author.username }}</a>
-                    {{ moment(comment.timestamp).fromNow() }}
-                    {% if moderate %}
-                    <br>
+                {% if moderate %}
+                <div class="flex space-x-2">
                     {% if comment.disabled %}
-                    <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}">Enable</a>
+                    <a href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}" class="px-3 py-1 text-sm rounded-md border border-blue-archive text-blue-archive hover:bg-blue-archive hover:text-white transition-all duration-300">启用</a>
                     {% else %}
-                    <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}">Disable</a>
-                    {% endif %}
+                    <a href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}" class="px-3 py-1 text-sm rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-all duration-300">禁用</a>
                     {% endif %}
                 </div>
+                {% endif %}
             </div>
         </div>
-    </li> 
+    </div> 
     {% endfor %} 
-</ul> 
+</div> 
 {% else %} 
-<p>No comments yet.</p> 
+<p class="text-gray-500">暂无评论。</p> 
 {% endif %} 

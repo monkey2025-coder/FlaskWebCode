@@ -2,251 +2,135 @@
 
 {% block head %} 
 {{ super() }} 
-<style> 
-    /* 蔚蓝档案风格样式 */ 
-    :root { 
-        --primary-color: #3b82f6; /* 主蓝色 */ 
-        --secondary-color: #ec4899; /* 辅助粉色 */ 
-        --accent-color: #f97316; /* 强调色 */ 
-        --light-color: #f3f4f6; /* 浅色背景 */ 
-        --dark-color: #1e293b; /* 深色文字 */ 
-        --card-bg: #ffffff; /* 卡片背景 */ 
-        --border-color: #e2e8f0; /* 边框颜色 */ 
+<!-- Tailwind CSS v3 --> 
+<script src="https://cdn.tailwindcss.com"></script> 
+<!-- 配置Tailwind自定义颜色 --> 
+<script> 
+    tailwind.config = { 
+        theme: { 
+            extend: { 
+                colors: { 
+                    'blue-archive': { 
+                        light: '#e0f2fe', 
+                        DEFAULT: '#3b82f6', 
+                        dark: '#1d4ed8', 
+                    }, 
+                    'purple-archive': { 
+                        light: '#f3e8ff', 
+                        DEFAULT: '#a855f7', 
+                        dark: '#7e22ce', 
+                    }, 
+                }, 
+                fontFamily: { 
+                    'sans': ['Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'], 
+                }, 
+            } 
+        } 
     } 
-    
-    body { 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        background-color: var(--light-color); 
-        color: var(--dark-color); 
+</script> 
+<style type="text/tailwindcss"> 
+    @layer utilities { 
+        .content-auto { 
+            content-visibility: auto; 
+        } 
+        .text-shadow { 
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); 
+        } 
+        .bg-gradient-archive { 
+            background: linear-gradient(135deg, #3b82f6, #a855f7); 
+        } 
+        .card-hover { 
+            @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg; 
+        } 
+        .btn-hover { 
+            @apply transition-all duration-300 hover:translate-y-[-2px] hover:shadow-md; 
+        } 
+        .avatar-hover { 
+            @apply transition-all duration-300 hover:scale-105 hover:shadow-md; 
+        } 
     } 
-    
-    /* 导航栏样式 */ 
-    .navbar { 
-        background: linear-gradient(135deg, var(--primary-color), #60a5fa); 
-        border: none; 
-        box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3); 
-    } 
-    
-    .navbar-brand { 
-        color: white !important; 
-        font-weight: bold; 
-        font-size: 1.5rem; 
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); 
-    } 
-    
-    .navbar-nav > li > a { 
-        color: white !important; 
-        font-weight: 500; 
-        transition: all 0.3s ease; 
-    } 
-    
-    .navbar-nav > li > a:hover { 
-        background-color: rgba(255, 255, 255, 0.2); 
-        border-radius: 4px; 
-    } 
-    
-    /* 内容区域样式 */ 
-    .container { 
-        margin-top: 20px; 
-        margin-bottom: 40px; 
-    } 
-    
-    /* 卡片样式 */ 
-    .card { 
-        background-color: var(--card-bg); 
-        border-radius: 12px; 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
-        padding: 20px; 
-        margin-bottom: 20px; 
-        transition: all 0.3s ease; 
-    } 
-    
-    .card:hover { 
-        transform: translateY(-5px); 
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); 
-    } 
-    
-    /* 按钮样式 */ 
-    .btn-primary { 
-        background-color: var(--primary-color); 
-        border-color: var(--primary-color); 
-        transition: all 0.3s ease; 
-    } 
-    
-    .btn-primary:hover { 
-        background-color: #2563eb; 
-        border-color: #2563eb; 
-        transform: translateY(-2px); 
-        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4); 
-    } 
-    
-    /* 表单样式 */ 
+    /* 自定义表单样式 */ 
     .form-control { 
-        border-radius: 8px; 
-        border: 1px solid var(--border-color); 
-        transition: all 0.3s ease; 
+        @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-archive focus:border-transparent transition-all duration-300; 
     } 
-    
-    .form-control:focus { 
-        border-color: var(--primary-color); 
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
+    .form-label { 
+        @apply block mb-2 text-sm font-medium text-gray-700; 
     } 
-    
-    /* 警告框样式 */ 
-    .alert { 
-        border-radius: 8px; 
-        border: none; 
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+    .form-submit { 
+        @apply w-full px-4 py-2 bg-blue-archive text-white rounded-md hover:bg-blue-archive/90 transition-all duration-300 hover:shadow-md; 
     } 
-    
-    /* 页头样式 */ 
-    .page-header { 
-        color: var(--dark-color); 
-        margin-bottom: 30px; 
-        padding-bottom: 10px; 
-        border-bottom: 2px solid var(--primary-color); 
+    .form-group { 
+        @apply mb-4; 
     } 
-    
-    .page-header h1 { 
-        font-weight: bold; 
-        color: var(--primary-color); 
+    .help-block { 
+        @apply text-sm text-red-600 mt-1; 
     } 
-    
-    /* 帖子样式 */ 
-    .post { 
-        background-color: var(--card-bg); 
-        border-radius: 12px; 
-        padding: 20px; 
-        margin-bottom: 20px; 
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
-        transition: all 0.3s ease; 
-    } 
-    
-    .post:hover { 
-        transform: translateY(-3px); 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
-    } 
-    
-    .post-header { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        margin-bottom: 10px; 
-    } 
-    
-    .post-author { 
-        font-weight: bold; 
-        color: var(--primary-color); 
-    } 
-    
-    .post-date { 
-        color: #64748b; 
-        font-size: 0.9rem; 
-    } 
-    
-    .post-body { 
-        margin-top: 10px; 
-        line-height: 1.6; 
-    } 
-    
-    .post-footer { 
-        margin-top: 15px; 
-    } 
-    
-    /* 头像样式 */ 
-    .profile-thumbnail img { 
-        border-radius: 50%; 
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
-        transition: all 0.3s ease; 
-        width: 40px; 
-        height: 40px; 
-        object-fit: cover; 
-    } 
-    
-    .profile-thumbnail img:hover { 
-        transform: scale(1.05); 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-    } 
-    
-    /* 去除列表样式 */ 
-    ul { 
-        list-style: none; 
-        padding: 0; 
-        margin: 0; 
-    } 
-    
-    /* 个人资料样式 */ 
-    .profile-thumbnail { 
-        display: inline-block; 
-    } 
-    
-    .profile-thumbnail img { 
-        border-radius: 50%; 
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); 
-        transition: all 0.3s ease; 
-    } 
-    
-    .profile-thumbnail img:hover { 
-        transform: scale(1.05); 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-    } 
-    
-    /* 响应式调整 */ 
-    @media (max-width: 768px) { 
-        .navbar-nav { 
-            margin-top: 10px; 
-        } 
-        
-        .container { 
-            margin-top: 10px; 
-        } 
+    .has-error .form-control { 
+        @apply border-red-500; 
     } 
 </style> 
 {% endblock %} 
 
-{% block title %}Flasky{% endblock %} 
+{% block title %}Flask社区{% endblock %}
 
 {% block navbar %} 
-<div class="navbar navbar-default" role="navigation"> 
-    <div class="container"> 
-        <div class="navbar-header"> 
-            <button type="button" class="navbar-toggle" 
-             data-toggle="collapse" data-target=".navbar-collapse"> 
-                <span class="sr-only">Toggle navigation</span> 
-                <span class="icon-bar"></span> 
-                <span class="icon-bar"></span> 
-                <span class="icon-bar"></span> 
-            </button> 
-            <a class="navbar-brand" href="/">Flasky</a> 
-        </div> 
-        <div class="navbar-collapse collapse"> 
-            <ul class="nav navbar-nav"> 
-                <li><a href="/">Home</a></li> 
+<nav class="bg-gradient-archive text-white shadow-lg"> 
+    <div class="container mx-auto px-4 py-3"> 
+        <div class="flex justify-between items-center"> 
+            <a href="/" class="text-2xl font-bold text-shadow">Flask社区</a> 
+            <!-- 桌面端菜单 --> 
+            <div class="md:flex space-x-6"> 
+                <a href="/" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">首页</a> 
                 {% if current_user.can(Permission.MODERATE_COMMENTS) %} 
-                <li><a href="{{ url_for('main.moderate') }}">Moderate Comments</a></li> 
+                <a href="{{ url_for('main.moderate') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">评论管理</a> 
                 {% endif %} 
-            </ul> 
-            <ul class="nav navbar-nav navbar-right"> 
                 {% if current_user.is_authenticated %} 
-                <li><a href="{{ url_for('main.user', username=current_user.username) }}"> Profile </a></li> 
-                <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li> 
+                <a href="{{ url_for('main.user', username=current_user.username) }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">个人资料</a> 
+                <a href="{{ url_for('auth.logout') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">退出</a> 
                 {% else %} 
-                <li><a href="{{ url_for('auth.login') }}">Sign In</a></li> 
-                <li><a href="{{ url_for('auth.register') }}">Register</a></li> 
+                <a href="{{ url_for('auth.login') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">登录</a> 
+                <a href="{{ url_for('auth.register') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">注册</a> 
                 {% endif %} 
-            </ul> 
-        </div>
+            </div> 
+            <!-- 移动端菜单按钮 --> 
+            <div class="md:hidden"> 
+                <button type="button" id="mobile-menu-button" class="text-white focus:outline-none"> 
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> 
+                    </svg> 
+                </button> 
+            </div> 
+        </div> 
+        <!-- 移动端菜单 --> 
+        <div id="mobile-menu" class="md:hidden hidden mt-4"> 
+            <div class="flex flex-col space-y-2"> 
+                <a href="/" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">首页</a> 
+                {% if current_user.can(Permission.MODERATE_COMMENTS) %} 
+                <a href="{{ url_for('main.moderate') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">评论管理</a> 
+                {% endif %} 
+                {% if current_user.is_authenticated %} 
+                <a href="{{ url_for('main.user', username=current_user.username) }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">个人资料</a> 
+                <a href="{{ url_for('auth.logout') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">退出</a> 
+                {% else %} 
+                <a href="{{ url_for('auth.login') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">登录</a> 
+                <a href="{{ url_for('auth.register') }}" class="hover:bg-white/20 px-3 py-2 rounded-md transition-all duration-300">注册</a> 
+                {% endif %} 
+            </div> 
+        </div> 
     </div> 
-</div> 
-
+</nav> 
 {% endblock %} 
 
 {% block content %} 
-<div class="container"> 
+<div class="container mx-auto px-4 py-8"> 
     {% for message in get_flashed_messages() %} 
-    <div class="alert alert-warning"> 
-        <button type="button" class="close" data-dismiss="alert">&times;</button> 
-        {{ message }} 
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded-md shadow-md"> 
+        <div class="flex items-center"> 
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> 
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path> 
+            </svg> 
+            <span>{{ message }}</span> 
+        </div> 
     </div> 
     {% endfor %} 
     {% block page_content %}{% endblock %} 
@@ -279,6 +163,15 @@
                 this.style.transform = 'translateY(0)'; 
             }); 
         }); 
+        
+        // 移动端菜单切换 
+        const mobileMenuButton = document.getElementById('mobile-menu-button'); 
+        const mobileMenu = document.getElementById('mobile-menu'); 
+        if (mobileMenuButton && mobileMenu) { 
+            mobileMenuButton.addEventListener('click', function() { 
+                mobileMenu.classList.toggle('hidden'); 
+            }); 
+        } 
     }); 
 </script> 
 {% endblock %}

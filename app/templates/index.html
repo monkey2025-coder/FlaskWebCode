@@ -2,34 +2,37 @@
 {% import "bootstrap/wtf.html" as wtf %} 
 {% import "_macros.html" as macros %} 
 
-{% block title %}Flasky{% endblock %} 
+{% block title %}Flask社区{% endblock %} 
 {% block page_content %} 
-<div class="page-header"> 
-    Hello, 
-    {% if current_user.is_authenticated %} 
-        {{ current_user.username }} 
-    {% else %} 
-        Stranger 
-    {% endif %}!
+<div class="mb-8"> 
+    <h1 class="text-3xl font-bold text-blue-archive mb-4">你好， 
+        {% if current_user.is_authenticated %} 
+            {{ current_user.username }} 
+        {% else %} 
+            陌生人 
+        {% endif %}!
+    </h1> 
 </div> 
 
 {% if current_user.is_authenticated %} 
-<div class="mb-3"> 
-    <a href="{{ url_for('.show_all') }}" class="btn btn-default{% if not show_followed %} active{% endif %}">All</a> 
-    <a href="{{ url_for('.show_followed') }}" class="btn btn-default{% if show_followed %} active{% endif %}">Followed</a> 
+<div class="flex space-x-4 mb-6"> 
+    <a href="{{ url_for('.show_all') }}" class="px-4 py-2 rounded-md {% if not show_followed %}bg-blue-archive text-white{% else %}bg-white text-blue-archive border border-blue-archive{% endif %} transition-all duration-300 hover:shadow-md">全部</a> 
+    <a href="{{ url_for('.show_followed') }}" class="px-4 py-2 rounded-md {% if show_followed %}bg-blue-archive text-white{% else %}bg-white text-blue-archive border border-blue-archive{% endif %} transition-all duration-300 hover:shadow-md">关注</a> 
 </div> 
 {% endif %} 
 
-<div> 
-    {% if current_user.can(Permission.WRITE_ARTICLES) %} 
+{% if current_user.can(Permission.WRITE_ARTICLES) %} 
+<div class="bg-white rounded-xl shadow-md p-6 mb-8"> 
     {{ wtf.quick_form(form) }} 
-    {% endif %} 
 </div> 
+{% endif %} 
 
 {% include '_posts.html' %}
-<div class="pagination"> 
+{% if pagination %} 
+<div class="flex justify-center mt-8"> 
     {{ macros.pagination_widget(pagination, '.index') }} 
 </div> 
+{% endif %} 
 
 {% endblock %}  
 
